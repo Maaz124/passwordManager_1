@@ -47,6 +47,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'payment' %}">payment</a>
+                        </li>
+
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == '/register/' %}active{% endif %}"

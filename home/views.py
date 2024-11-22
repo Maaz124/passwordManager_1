@@ -57,6 +57,9 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
+def payment_view(request):
+    return render(request, 'pages/payment.html')
+
 
 # add new password
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
