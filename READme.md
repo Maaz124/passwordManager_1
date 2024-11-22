@@ -1,5 +1,18 @@
 # Welcome to Password Manager:
+
+**How to run**
+use docker cli to run this project. 
+**commands**
+$ docker compose build
+$ docker compose up 
+// will br run at local host port 8000
+
+
+
 **Features:** 
+
+
+
 The password manager must be able to handle different users and store their usernames and passwords for websites, desktop applications & games.
 
  - If storing a username & password for a website it should store the username, the password, the website name, the website URL, date created, date last updated
