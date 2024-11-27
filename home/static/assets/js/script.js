@@ -77,3 +77,58 @@ function toggleView(id) {
         icon.classList.add("fa-eye")
     }
 }
+let timerInterval; // Declare the timer interval globally
+
+
+function useFreeVersion() {
+    // Set the initial timer duration (10 minutes)
+    const initialTime = 10 * 60;
+    
+    if (!localStorage.getItem("timeleft")) {
+        localStorage.setItem("timeleft", initialTime); // Save the timer duration in localStorage
+    }
+
+    startTimer(); // Start the timer
+    document.getElementById("timer").style.display = "inline"; // Show the timer
+    closePopup(); // Optionally close the popup
+}
+
+function startTimer() {
+    const timerElement = document.getElementById("timer");
+    let timeLeft = localStorage.getItem("timeleft");
+
+    // Clear any existing interval to avoid multiple timers
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+
+        // Update the timer display
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        // Save the updated time in localStorage
+        localStorage.setItem("timeleft", timeLeft);
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            localStorage.removeItem("timeleft"); // Clear the saved time
+            alert("all of your information will be made public!!!");
+            timerElement.style.display = "none"; // Hide the timer after expiry
+        }
+    }, 1000);
+}
+
+// Start the timer automatically if the time is already saved in localStorage
+document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("timeleft")) {
+        const timeLeft = localStorage.getItem("timeleft");
+        if (timeLeft > 0) {
+            document.getElementById("timer").style.display = "inline"; // Show the timer
+            startTimer(); // Resume the timer
+        }
+    }
+});
