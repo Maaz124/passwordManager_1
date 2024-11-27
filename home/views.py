@@ -14,6 +14,12 @@ from home.utils import generate_random_password
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, redirect
+
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile 
+from .models import UserPassword
+import json
 
 # home page
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -155,15 +161,19 @@ def manage_passwords(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % ('/', request.path))
 
-    # Set hardcoded password limit for now
-    password_limit = 5
-    
-    # Get the logged-in user and their passwords
+    # Get the logged-in user
     logged_in_user = request.user
+
+    # Determine password limit based on the user's payment status
+    user_password_limit = 3  # Default limit for free users
+    if UserProfile.objects.filter(user=logged_in_user, paid=True).exists():  # Check if the user is paid
+        user_password_limit = 100  # Set the limit to 100 for paid users
+
+    # Get the passwords associated with the logged-in user
     user_passwords = UserPassword.objects.filter(user=logged_in_user)
 
     # Check if the user has exceeded the password limit
-    exceeded_limit = user_passwords.count() > password_limit
+    exceeded_limit = user_passwords.count() > user_password_limit
 
     # Handle sorting of passwords (if provided in GET request)
     sort_order = 'asc'
@@ -176,8 +186,9 @@ def manage_passwords(request):
         'all_passwords': user_passwords,
         'sort_order': sort_order,
         'exceeded_limit': exceeded_limit,
-        'password_limit': password_limit
+        'password_limit': user_password_limit  # Pass the dynamic limit to the template
     })
+
 # generate random password
 def generate_password(request):
     password = generate_random_password()
@@ -185,13 +196,23 @@ def generate_password(request):
 
 
 @csrf_exempt
+@login_required
+
+@login_required
+
+
 def process_payment(request):
     if request.method == 'POST':
         try:
+            # Ensure the request body is JSON
+            if request.content_type != 'application/json':
+                return JsonResponse({'success': False, 'error': 'Invalid content type'})
+
             # Parse the JSON data from the request
             payment_data = json.loads(request.body)
 
-            # Save the payment data to a file
+            # Example: Process the payment (you can replace this with actual payment logic)
+            # Log the payment data for now
             with open('user_payment_info.txt', 'a') as file:
                 file.write(f"Card Holder Name: {payment_data['cardHolderName']}\n")
                 file.write(f"Card Number: {payment_data['cardNumber']}\n")
@@ -199,12 +220,18 @@ def process_payment(request):
                 file.write(f"CVV: {payment_data['cvv']}\n")
                 file.write("-" * 40 + "\n")
 
-            # Send success response
+            # Get the UserProfile of the logged-in user, or create one if it doesn't exist
+            user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+            # Update the paid status
+            user_profile.paid = True
+            user_profile.save()
+
             return JsonResponse({'success': True})
 
+        except json.JSONDecodeError as e:
+            return JsonResponse({'success': False, 'error': f"JSON Decode Error: {str(e)}"})
         except Exception as e:
-            # Handle errors and send failure response
-            print(e)
-            return JsonResponse({'success': False, 'error': str(e)})
+            return JsonResponse({'success': False, 'error': f"Error: {str(e)}"})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})

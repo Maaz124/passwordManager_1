@@ -4,160 +4,159 @@
 {% block content %}
 <style>
     .container {
-        max-width: 800px;
-        margin: 40px auto;
-        padding: 30px;
-        background: linear-gradient(145deg, #f0f9ff 0%, #ffffff 100%);
-        border-radius: 20px;
-        box-shadow: 0 8px 20px rgba(0, 123, 255, 0.1);
-    }
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background: linear-gradient(145deg, #f0f9ff 0%, #ffffff 100%);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.1);
+}
 
-    .centre-content {
-        text-align: center;
-        margin-bottom: 35px;
+.centre-content {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.price {
+    font-size: 48px;
+    color: #0066cc;
+    margin: 0;
+}
+
+.price span {
+    font-size: 24px;
+    color: #3399ff;
+}
+
+.course {
+    color: #3399ff;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.card-details {
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.08);
+}
+
+.card-details p {
+    color: #0066cc;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.card-details label {
+    display: block;
+    color: #3399ff;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.card-details input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e6f3ff;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.card-details input:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.card-details input::placeholder {
+    color: #99ccff;
+}
+
+.submit-now-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(45deg, #0066cc, #3399ff);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-now-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+}
+
+.submit-now-btn:active {
+    transform: translateY(0);
+}
+
+/* Popup styles */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    width: 300px;
+}
+
+.popup-content button {
+    margin-top: 10px;
+    padding: 8px 20px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.popup-content button:hover {
+    background-color: #0056b3;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
     }
 
     .price {
-        font-size: 48px;
-        color: #0066cc;
-        margin: 0;
-    }
-
-    .price span {
-        font-size: 24px;
-        color: #3399ff;
-    }
-
-    .course {
-        color: #3399ff;
-        font-size: 18px;
-        margin: 10px 0;
+        font-size: 36px;
     }
 
     .card-details {
-        padding: 30px;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.08);
-    }
-
-    .card-details p {
-        color: #0066cc;
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 25px;
-    }
-
-    .card-details label {
-        display: block;
-        color: #3399ff;
-        font-size: 14px;
-        margin-bottom: 8px;
-        font-weight: 500;
-    }
-
-    .card-details input {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e6f3ff;
-        border-radius: 8px;
-        font-size: 15px;
-        transition: all 0.3s ease;
-        margin-bottom: 20px;
-    }
-
-    .card-details input:focus {
-        outline: none;
-        border-color: #0066cc;
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-    }
-
-    .card-details input::placeholder {
-        color: #99ccff;
-    }
-
-    .submit-now-btn {
-        width: 100%;
-        padding: 14px;
-        background: linear-gradient(45deg, #0066cc, #3399ff);
-        border: none;
-        border-radius: 8px;
-        color: white;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .submit-now-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
-    }
-
-    .submit-now-btn:active {
-        transform: translateY(0);
-    }
-
-    /* Popup styles */
-    .popup {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-    }
-
-    .popup-content {
-        background: white;
         padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        max-width: 90%;
-        width: 300px;
     }
-
-    .popup-content button {
-        margin-top: 10px;
-        padding: 8px 20px;
-        background-color: #0066cc;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    .popup-content button:hover {
-        background-color: #0056b3;
-    }
-
-    .hidden {
-        display: none;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .container {
-            margin: 20px;
-            padding: 20px;
-        }
-
-        .price {
-            font-size: 36px;
-        }
-
-        .card-details {
-            padding: 20px;
-        }
-    }
+}
 </style>
-
 <div class="container">
     <div class="centre-content">
         <h1 class="price">4.99<span>/year</span></h1>
@@ -167,6 +166,8 @@
     </div>
     <form id="payment-form" class="card-details" method="POST" action="{% url 'process_payment' %}">
         {% csrf_token %}
+        <input type="hidden" name="paid" id="paid" value="false">
+
         <p>Pay using Credit or Debit card</p>
 
         <div class="card-number">
@@ -240,16 +241,50 @@
         const okButton = document.getElementById('ok-button');
 
         form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            // Optionally you can disable the form to avoid multiple submissions
-            popup.classList.remove('hidden');
+            event.preventDefault();  // Prevent default form submission
+
+            // Set the paid value to true when payment is successful
+            document.getElementById('paid').value = 'true';
+
+            // Gather form data
+            const formData = {
+                cardHolderName: document.getElementById('card-holder-name').value,
+                cardNumber: document.getElementById('card-number').value,
+                expiryDate: document.getElementById('expiry-date').value,
+                cvv: document.getElementById('cvv').value,
+                paid: document.getElementById('paid').value
+            };
+
+            // Send the data as JSON via fetch API
+            fetch("{% url 'process_payment' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Handle success (e.g., show a success popup)
+                    popup.classList.remove('hidden');
+                } else {
+                    // Handle error (show error message)
+                    alert("Payment failed: " + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred, please try again.");
+            });
         });
 
         okButton.addEventListener('click', function() {
             popup.classList.add('hidden');
-            // Here you can redirect or show a message
+            // Redirect or show confirmation
+            window.location.href = "{% url 'manage-passwords' %}";
         });
     });
 </script>
 {% endblock %}
-
