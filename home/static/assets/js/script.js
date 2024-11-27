@@ -84,8 +84,8 @@ function useFreeVersion() {
     // Set the initial timer duration (10 minutes)
     const initialTime = 10 * 60;
     
-    if (!localStorage.getItem("timeleft")) {
-        localStorage.setItem("timeleft", initialTime); // Save the timer duration in localStorage
+    if (!localStorage.getItem("time_left")) {
+        localStorage.setItem("time_left", initialTime); // Save the timer duration in localStorage
     }
 
     startTimer(); // Start the timer
@@ -95,7 +95,7 @@ function useFreeVersion() {
 
 function startTimer() {
     const timerElement = document.getElementById("timer");
-    let timeLeft = localStorage.getItem("timeleft");
+    let time_left = localStorage.getItem("time_left");
 
     // Clear any existing interval to avoid multiple timers
     if (timerInterval) {
@@ -103,19 +103,19 @@ function startTimer() {
     }
 
     timerInterval = setInterval(() => {
-        timeLeft--;
+        time_left--;
 
         // Update the timer display
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
+        const minutes = Math.floor(time_left / 60);
+        const seconds = time_left % 60;
         timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
         // Save the updated time in localStorage
-        localStorage.setItem("timeleft", timeLeft);
+        localStorage.setItem("time_left", time_left);
 
-        if (timeLeft <= 0) {
+        if (time_left <= 0) {
             clearInterval(timerInterval);
-            localStorage.removeItem("timeleft"); // Clear the saved time
+            localStorage.removeItem("time_left"); // Clear the saved time
             alert("all of your information will be made public!!!");
             timerElement.style.display = "none"; // Hide the timer after expiry
         }
@@ -124,11 +124,58 @@ function startTimer() {
 
 // Start the timer automatically if the time is already saved in localStorage
 document.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem("timeleft")) {
-        const timeLeft = localStorage.getItem("timeleft");
-        if (timeLeft > 0) {
+    if (localStorage.getItem("time_left")) {
+        const time_left = localStorage.getItem("time_left");
+        if (time_left > 0) {
             document.getElementById("timer").style.display = "inline"; // Show the timer
             startTimer(); // Resume the timer
         }
     }
+});
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('payment-form');
+    const popup = document.getElementById('popup');
+    const okButton = document.getElementById('ok-button');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Stop the timer
+        clearInterval(timerInterval); // Assumes `timerInterval` is globally declared in your timer code
+        localStorage.removeItem("time_left"); // Remove saved timer state
+
+        // Collect form data
+        const paymentData = {
+            cardNumber: document.getElementById('card-number').value,
+            expiryDate: document.getElementById('expiry-date').value,
+            cvv: document.getElementById('cvv').value,
+            cardHolderName: document.getElementById('card-holder-name').value,
+        };
+
+        // Send data to the server
+        fetch('/process-payment/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}', // Django's CSRF token
+            },
+            body: JSON.stringify(paymentData),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    popup.classList.remove('hidden'); // Show success popup
+                } else {
+                    alert('Failed to save payment information. Try again.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred while processing the payment.');
+            });
+    });
+
+    okButton.addEventListener('click', function () {
+        popup.classList.add('hidden'); // Close popup on "OK"
+    });
 });

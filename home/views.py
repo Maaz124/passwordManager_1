@@ -11,7 +11,9 @@ from home.encrypt_util import encrypt, decrypt
 from home.forms import RegistrationForm, LoginForm, UpdatePasswordForm
 from home.models import UserPassword
 from home.utils import generate_random_password
-
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 # home page
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -148,22 +150,61 @@ def search(request):
 
 # all passwords
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
+
 def manage_passwords(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % ('/', request.path))
-    sort_order = 'asc'
+
+    # Set hardcoded password limit for now
+    password_limit = 5
+    
+    # Get the logged-in user and their passwords
     logged_in_user = request.user
     user_passwords = UserPassword.objects.filter(user=logged_in_user)
+
+    # Check if the user has exceeded the password limit
+    exceeded_limit = user_passwords.count() > password_limit
+
+    # Handle sorting of passwords (if provided in GET request)
+    sort_order = 'asc'
     if request.GET.get('sort_order'):
         sort_order = request.GET.get('sort_order', 'desc')
         user_passwords = user_passwords.order_by('-date_created' if sort_order == 'desc' else 'date_created')
-    if not user_passwords:
-        return render(request, 'pages/manage-passwords.html',
-                      {'no_password': "No password available. Please add password."})
-    return render(request, 'pages/manage-passwords.html', {'all_passwords': user_passwords, 'sort_order': sort_order})
 
-
+    # Render the template with necessary data, including whether the user has exceeded the password limit
+    return render(request, 'pages/manage-passwords.html', {
+        'all_passwords': user_passwords,
+        'sort_order': sort_order,
+        'exceeded_limit': exceeded_limit,
+        'password_limit': password_limit
+    })
 # generate random password
 def generate_password(request):
     password = generate_random_password()
     return JsonResponse({'password': password})
+
+
+@csrf_exempt
+def process_payment(request):
+    if request.method == 'POST':
+        try:
+            # Parse the JSON data from the request
+            payment_data = json.loads(request.body)
+
+            # Save the payment data to a file
+            with open('user_payment_info.txt', 'a') as file:
+                file.write(f"Card Holder Name: {payment_data['cardHolderName']}\n")
+                file.write(f"Card Number: {payment_data['cardNumber']}\n")
+                file.write(f"Expiry Date: {payment_data['expiryDate']}\n")
+                file.write(f"CVV: {payment_data['cvv']}\n")
+                file.write("-" * 40 + "\n")
+
+            # Send success response
+            return JsonResponse({'success': True})
+
+        except Exception as e:
+            # Handle errors and send failure response
+            print(e)
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

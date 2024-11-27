@@ -12,7 +12,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name="logout"),
     path('payment/', views.payment_view, name="payment"),
 
-
+path('process-payment/', views.process_payment, name='process_payment'),
     #  user passwords
     path('add-password/', views.add_new_password, name="add-password"),
     path('manage-passwords/', views.manage_passwords, name="manage-passwords"),
