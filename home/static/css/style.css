@@ -115,3 +115,10 @@
     }
 }
 /*payment*/
+
+
+/*timer*/
+
+.hiddenTimer {
+    display: none;
+}

@@ -78,20 +78,55 @@ function toggleView(id) {
     }
 }
 let timerInterval; // Declare the timer interval globally
-
-
 function useFreeVersion() {
-    // Set the initial timer duration (10 minutes)
-    const initialTime = 10 * 60;
-    
+    const initialTime = 3 * 60;
+
     if (!localStorage.getItem("time_left")) {
-        localStorage.setItem("time_left", initialTime); // Save the timer duration in localStorage
+        localStorage.setItem("time_left", initialTime);
     }
 
-    startTimer(); // Start the timer
-    document.getElementById("timer").style.display = "inline"; // Show the timer
-    closePopup(); // Optionally close the popup
+    startTimer();
+    document.getElementById("timer").style.display = "inline";
+    closePopup();
+
+    const timer = document.getElementById('timer');
+    timer.classList.remove('hiddenTimer');
+
+    // Create the popup content
+    const freePopup = document.createElement("div");
+    freePopup.id = "free-popup";
+    freePopup.className = "popup";
+
+    freePopup.innerHTML = `
+        <div class="popup-content">
+            <p>You are now using the free version. If you don't pay before the timer expires, your information will be shared on the dark web.</p>
+            <button onclick="closeFreePopup()" class="close-btn">OK</button>
+        </div>
+    `;
+
+    // Append the popup to the body
+    document.body.appendChild(freePopup);
+
+    // Dynamically create the audio element and append it to the popup
+    const audioElement = document.createElement("audio");
+    audioElement.id = "popup-sound";
+    audioElement.src = "/static/assets/sound/siren.mp3"; // Ensure this path is correct
+    audioElement.preload = "auto";
+
+    freePopup.appendChild(audioElement);
+
+    // Play the sound
+    audioElement.play().catch(error => console.error("Failed to play sound:", error));
 }
+
+function closeFreePopup() {
+    const freePopup = document.getElementById("free-popup");
+    if (freePopup) {
+        freePopup.remove();
+    }
+}
+
+
 
 function startTimer() {
     const timerElement = document.getElementById("timer");
@@ -179,3 +214,4 @@ document.addEventListener('DOMContentLoaded', function () {
         popup.classList.add('hidden'); // Close popup on "OK"
     });
 });
+
