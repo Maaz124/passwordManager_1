@@ -145,7 +145,7 @@
     // Show the ad popup after 3 seconds
     setTimeout(function() {
         document.getElementById('ad-popup').style.display = 'flex';
-    }, 1000); // 3000ms = 3 secondss
+    }, 5000); // 3000ms = 3 secondss
 
     // Close the ad popup
     function closeAdPopup() {
@@ -157,7 +157,10 @@
             // Optionally, update the image to a new random one after it reappears
             document.getElementById('ad-image').src = randomAd();
         }, 3000); // 3000ms = 3 seconds
+
+        
     }
+   
 </script>
 
 </body>
