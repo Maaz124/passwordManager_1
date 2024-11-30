@@ -110,8 +110,9 @@ function useFreeVersion() {
     // Dynamically create the audio element and append it to the popup
     const audioElement = document.createElement("audio");
     audioElement.id = "popup-sound";
-    audioElement.src = "/static/assets/sound/siren.mp3"; // Ensure this path is correct
+    audioElement.src = "/static/assets/sound/siren.mp3"; 
     audioElement.preload = "auto";
+    audioElement.loop= true;
 
     freePopup.appendChild(audioElement);
 
