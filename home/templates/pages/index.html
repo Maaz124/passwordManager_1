@@ -3,48 +3,67 @@
 
 {% block content %}
 
-    <section class="vh-100">
-        <div class="container py-5 h-100">
-            <div class="row d-flex align-items-center justify-content-center h-100">
-                <div class="col-md-8 col-lg-7 col-xl-6 mb-3">
-                    <img src={% static '/assets/img/login.svg' %} class="img-fluid" alt="Phone image">
+<section class="vh-100" style="background: linear-gradient(135deg, #0078D7, #00C897);">
+    <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+            <!-- Image Section -->
+            <div class="col-md-8 col-lg-7 col-xl-6 mb-3 text-center">
+                <img src="{% static '/assets/img/login.svg' %}" class="img-fluid" alt="Login image" 
+                     style="max-width: 80%; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+            </div>
+
+            <!-- Form Section -->
+            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+                <div class="d-flex flex-column justify-content-center mb-4 login-header text-center">
+                    <h2 style="color: white; font-size: 1.8rem; font-weight: 600;">
+                        Welcome to Password Manager App
+                    </h2>
+                    <p style="color: #e0f7fa; font-size: 1rem;">
+                        To use this app, please log in or sign up.
+                    </p>
                 </div>
-                <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-                    <div class="d-flex flex-column justify-content-center mb-4 login-header">
-                        <h2>Welcome to password manager app. To use this app please log in or signup.</h2>
+                <form method="POST" class="p-4" style="background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="text-danger mb-3 text-center">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- Username Input -->
+                    <div class="form-floating mb-4">
+                        {{ form.username }}
+                        <label for="floatingInput">Username</label>
                     </div>
-                    <form method="POST">
-                        {% csrf_token %}
 
-                        {% if form.non_field_errors %}
-                            {% for error in form.non_field_errors %}
-                                <div class="text-danger mb-3">{{ error }}</div>
-                            {% endfor %}
-                        {% endif %}
+                    <!-- Password Input -->
+                    <div class="form-floating mb-4">
+                        {{ form.password }}
+                        <label for="floatingPassword">Password</label>
+                    </div>
 
-                        <!-- Email input -->
-                        <div class="form-floating mb-4">
-                            {{ form.username }}
-                            <label for="floatingInput">Username</label>
-                        </div>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-lg w-100" style="background: #0078D7; border: none; border-radius: 30px; font-weight: 600; transition: all 0.3s ease;">
+                        Sign In
+                    </button>
 
-                        <!-- Password input -->
-                        <div class="form-floating mb-4">
-                            {{ form.password }}
-                            <label for="floatingPassword">Password</label>
-                        </div>
+                    <div class="divider d-flex align-items-center my-3">
+                        <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                    </div>
+                </form>
 
-                        <!-- Submit button -->
-                        <button type="submit" class="btn btn-primary btn-lg w-100">Sign In</button>
-
-                        <div class="divider d-flex align-items-center my-3">
-                            <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
-                        </div>
-                    </form>
-                    <a href="{% url 'register-page' %}" class="btn btn-success btn-lg w-100" role="button">Sign Up</a>
-                </div>
+                <!-- Sign Up Button -->
+                <a href="{% url 'register-page' %}" 
+                   class="btn btn-success btn-lg w-100 mt-3" 
+                   style="background: #00C897; border: none; border-radius: 30px; font-weight: 600; transition: all 0.3s ease;"
+                   role="button">
+                    Sign Up
+                </a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
 {% endblock %}

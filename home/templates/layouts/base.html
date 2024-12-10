@@ -58,44 +58,52 @@
 <body>
 
 <header>
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand-lg" style="background: linear-gradient(to right, #0078D7, #00C897);">
         <div class="container">
+            <!-- Navbar Toggler -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
                     aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon" style="filter: invert(100%);"></span>
             </button>
+    
+            <!-- Navbar Brand -->
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand" href="{% url 'home' %}" style="display: flex; align-items: center;">
+                    <img src="{% static 'assets/img/icon/logo.png' %}" alt="vault" width="50" height="50" style="margin-right: 10px;">
+                    <span style="color: #fff; font-weight: bold; font-size: 1.5rem;">Password Manager</span>
+                </a>
+            </div>
+    
+            <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <a class="navbar-brand" href="{% url 'home' %}">
-                    <img src="{% static 'assets/img/icon/logo.png' %}" alt="vault" width="60" height="60"/>
-                </a><a class="navbar-brand" href="{% url 'home' %}">Password Manager</a>
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="align-items: center;">
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="nav-link hiddenTimer" id="timer">3:00</span>
+                        <span class="nav-link hiddenTimer" id="timer" style="color: #fff; font-weight: 600;">3:00</span>
                     </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/add-password/' %}active{% endif %}"
-                               aria-current="page" href="{% url 'add-password' %}">Add password</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/manage-passwords/' %}active{% endif %}"
-                               aria-current="page" href="{% url 'manage-passwords' %}">Manage passwords</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/search/' %}active{% endif %}"
-                               href="{% url 'search' %}">Search</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'payment' %}">Payment</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/add-password/' %}active{% endif %}" 
+                           style="color: #fff; font-weight: 500;" href="{% url 'add-password' %}">Add Password</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/manage-passwords/' %}active{% endif %}" 
+                           style="color: #fff; font-weight: 500;" href="{% url 'manage-passwords' %}">Manage Passwords</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/search/' %}active{% endif %}" 
+                           style="color: #fff; font-weight: 500;" href="{% url 'search' %}">Search</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: #fff; font-weight: 500;" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: #fff; font-weight: 500;" href="{% url 'payment' %}">Payment</a>
+                    </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/register/' %}active{% endif %}"
-                               href="{% url 'register-page' %}">Register</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/register/' %}active{% endif %}" 
+                           style="color: #fff; font-weight: 500;" href="{% url 'register-page' %}">Register</a>
+                    </li>
                     {% endif %}
                 </ul>
             </div>
@@ -145,21 +153,22 @@
     // Show the ad popup after 3 seconds
     setTimeout(function() {
         document.getElementById('ad-popup').style.display = 'flex';
-    }, 5000); // 3000ms = 3 secondss
+    }, 7000); // 3000ms = 3 secondss
 
     // Close the ad popup
     function closeAdPopup() {
-        document.getElementById('ad-popup').style.display = 'none';
-        
-        // Reappear the ad after 3 seconds
-        setTimeout(function() {
-            document.getElementById('ad-popup').style.display = 'flex';
-            // Optionally, update the image to a new random one after it reappears
-            document.getElementById('ad-image').src = randomAd();
-        }, 3000); // 3000ms = 3 seconds
+    document.getElementById('ad-popup').style.display = 'none';
+    
+    // Generate a random delay between 12000ms (12 seconds) and 20000ms (20 seconds)
+    const randomDelay = Math.floor(Math.random() * (20000 - 12000 + 1)) + 12000;
 
-        
-    }
+    // Reappear the ad after the random delay
+    setTimeout(function() {
+        document.getElementById('ad-popup').style.display = 'flex';
+        // Optionally, update the image to a new random one after it reappears
+        document.getElementById('ad-image').src = randomAd();
+    }, randomDelay);
+}
    
 </script>
 
